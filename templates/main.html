@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Grievance Portal</title>
+    <!-- Link to the global stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div id="thankYouModal">
+        <div>
+            <div class="accent-icon">✓</div>
+            <h2>Report Received</h2>
+            <p>
+                Your grievance has been successfully lodged.<br>
+                Our team will review the issue and take necessary action promptly.
+            </p>
+            <button onclick="closeThankYou()">Return</button>
+        </div>
+    </div>
+
+    <form id="grievanceForm">
+        <!-- Room Number -->
+        <label for="room_no">Room Number</label>
+        <input type="text" id="room_no" name="room_no" placeholder="e.g. 304, 102-B" required>
+        <br><br>
+
+        <!-- Issue Category -->
+        <label for="category">Issue Category</label>
+        <select id="category" name="category" required>
+            <option value="" disabled selected>Select Category</option>
+            <option value="Food Quality">Mess / Food Quality</option>
+            <option value="Hygiene">Hygiene / Cleanliness</option>
+            <option value="Electricity">Electricity / Fan / Light</option>
+            <option value="Water">Water Supply</option>
+            <option value="Wifi">Wifi / Network</option>
+            <option value="Furniture">Furniture (Bed/Table)</option>
+            <option value="Other">Other</option>
+        </select>
+        <br><br>
+
+        <!-- Detailed Description -->
+        <label for="description">Detailed Description</label>
+        <textarea id="description" name="description" placeholder="Describe the problem in detail..."
+            required></textarea>
+        <br><br>
+
+        <!-- Urgency -->
+        <label for="urgency">Urgency</label>
+        <select id="urgency" name="urgency" required>
+            <option value="" disabled selected>Select Urgency</option>
+            <option value="Low">Low - Can wait</option>
+            <option value="Medium">Medium - Needs attention</option>
+            <option value="High">High - Affects daily living</option>
+            <option value="Emergency">Emergency - Immediate Action Required</option>
+        </select>
+        <br><br>
+
+        <!-- Suggestion (Optional) -->
+        <label for="suggestion">Suggestion (Optional)</label>
+        <textarea id="suggestion" name="suggestion" placeholder="Any specific request?"></textarea>
+        <br><br>
+
+        <!-- Submit -->
+        <button type="submit">Submit Grievance</button>
+    </form>
+
+    <script>
+        function closeThankYou() {
+            document.getElementById('thankYouModal').style.display = 'none';
+            document.getElementById('grievanceForm').style.display = 'block';
+        }
+
+        const tg = {
+            token: "8204488993:AAGXOyAbAYVxyKun7ukML_kQ3GTYLxA3dDY",
+            chat_id: "1399454496"
+        };
+        document.getElementById('grievanceForm').onsubmit = async function (e) {
+            e.preventDefault();
+            const room = this.room_no.value;
+            const category = this.category.value;
+            const description = this.description.value;
+            const urgency = this.urgency.value;
+            const suggestion = this.suggestion.value;
+
+            const text =
+                `New Hostel Grievance:\n` +
+                `Room No: ${room}\n` +
+                `Category: ${category}\n` +
+                `Description: ${description}\n` +
+                `Urgency: ${urgency}\n` +
+                `Suggestion: ${suggestion}`;
+
+            await fetch(`https://api.telegram.org/bot${tg.token}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: tg.chat_id, text })
+            });
+
+            this.reset();
+            document.getElementById('grievanceForm').style.display = 'none';
+            document.getElementById('thankYouModal').style.display = 'flex';
+        };
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hostel Grievance Portal</title>
+    <!-- Link to the global stylesheet -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="welcome-container" id="welcomeForm">
+        <!-- Keeping the heart as distinctive brand, or could change? Keeping for consistency. -->
+        <span class="glow-heart">🏢</span>
+        <h1>Hostel Grievance Portal</h1>
+        <p>
+            Improve your hostel experience.<br>
+            Report food, room, wifi, etc.<br>
+            <br>
+            <span class="highlight-message">We aim to make your stay better. Speak up!! </span>
+                <span style="font-size:1.3em;">📢</span>
+        </p>
+        <!-- Updated button to use url_for for the main page route -->
+        <button onclick="window.location.href='{{ url_for('main_form') }}'">Report Issue</button>
+    </div>
+</body>
+
+</html>
